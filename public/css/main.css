@@ -5,6 +5,24 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+main {
+    word-wrap: break-word;
+}
+main p{
+    /* display: block; */
+    width: 80%;
+    margin: 0 auto;
+    height: auto;
+    text-align: center;
+    margin-top: 154px;
+    font-family: 'Bellefair';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 45px;
+    /* line-height: 1px; */
+    letter-spacing: 0.01em;
+    white-space: pre-wrap;
+}
 
 @media screen and (min-width:1200px) {
     .main-macbook {

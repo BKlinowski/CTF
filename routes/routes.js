@@ -1,9 +1,14 @@
-import router from "express"
+import router from "express";
+import { Route } from "express";
 
-const Router = router()
+const Router = router();
 
 Router.get("/", (req, res, next) => {
-    res.render("main.ejs")
-})
+  res.render("main.ejs");
+});
 
-export default Router
+Router.get("/login", (req, res, next) => {
+  res.render("login.ejs");
+});
+
+export default Router;
