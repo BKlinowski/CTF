@@ -1,3 +1,11 @@
+html {
+    height: 100vh;
+}
+
+body {
+    height: 100%;
+}
+
 .main-macbook {
     background-size: contain;
     min-height: 427px;
@@ -5,10 +13,12 @@
     background-position: center;
     background-repeat: no-repeat;
 }
+
 main {
     word-wrap: break-word;
 }
-main p{
+
+main p {
     /* display: block; */
     width: 80%;
     margin: 0 auto;
