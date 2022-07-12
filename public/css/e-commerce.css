@@ -1,0 +1,83 @@
+.ecommerce__container {
+    display: grid;
+    grid-gap: 90px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(3, min-content);
+    margin: 108px 10%;
+}
+
+.ecommerce__leftSideBar {
+    grid-column: 1 / 2;
+    grid-row: 1 / 2;
+}
+
+.ecommerce__leftSideBar p {
+    width: 100%;
+}
+
+.ecommerce__title {
+    font-family: 'Alegreya SC';
+    font-style: normal;
+    font-weight: 500;
+    text-align: left;
+    font-size: 45px;
+    line-height: 149.1%;
+    text-align: center;
+    letter-spacing: 0.545em;
+    margin-bottom: 60px;
+}
+
+.ecommerce__text {
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 25px;
+    line-height: 30px;
+}
+
+.ecommerce__rightSideBar {
+    grid-column: 2 / 3;
+    grid-row: 1 / 2;
+    align-self: center;
+    height: 426px;
+    background: url("../img/ecommerce_s.jpg");
+    background-repeat: no-repeat;
+    border: 1px solid #000000;
+    filter: drop-shadow(0px 4px 4px rgba(0, 0, 0, 0.25));
+    border-radius: 30px;
+}
+
+.ecommerce__bottomText {
+    grid-column: 1 / 3;
+    grid-row: 2 / 3;
+}
+
+.ecommerce__bottomText p {
+    width: 100%;
+}
+
+.ecommerce__button {
+    grid-column: 1 / 3;
+    grid-row: 3 / 4;
+    justify-self: center;
+    width: 333px;
+    height: 70px;
+    margin-bottom: 65px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    color: black;
+    font-family: 'Montserrat';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    text-align: center;
+}
+
+.ecommerce__button:hover {
+    cursor: pointer;
+    background-color: #000000;
+    color: white;
+    border-color: white;
+}

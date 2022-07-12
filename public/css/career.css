@@ -1,0 +1,94 @@
+.career__container {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: repeat(6, min-content);
+    grid-gap: 15px;
+    width: 80%;
+    justify-content: center;
+    margin: 0 auto;
+}
+
+.career__container input,
+textarea {
+    border: 3px solid #FFFFFF;
+    border-radius: 4px;
+    width: 100%;
+    background-color: black;
+    height: 64px;
+    font-size: 24px;
+    padding: 10px;
+}
+
+.career__container label {
+    font-size: 16px;
+    line-height: 20px;
+    text-align: left;
+    margin-bottom: 5px;
+    margin-left: 5px;
+    display: block;
+}
+
+.career__container button {
+    width: 119px;
+    height: 39px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    color: black;
+    border-radius: 4px;
+}
+
+.career__container button:hover {
+    cursor: pointer;
+    background: black;
+    border-color: white;
+    color: white;
+}
+
+.career__mainText {
+    grid-column: 1/3;
+    grid-row: 1/2;
+    justify-self: center;
+    font-size: 21px;
+    line-height: 26px;
+    text-align: center;
+    margin-top: 105px;
+}
+
+.career__firstnameContainer {
+    grid-column: 1/2;
+    grid-row: 2/3;
+}
+
+.career__surnameContainer {
+    grid-column: 2/3;
+    grid-row: 2/3;
+}
+
+.career__emailContainer {
+    grid-column: 1/3;
+    grid-row: 3/4;
+}
+
+.career__buttonCV {
+    grid-column: 1/2;
+    grid-row: 4/5;
+    justify-self: left;
+}
+
+.career__additionalInfoContainer {
+    grid-column: 1/3;
+    grid-row: 5/6;
+}
+
+.career__textareaAdditionalInfo {
+    min-height: 139px;
+    width: 100%;
+    resize: none;
+}
+
+.career__buttonApply {
+    grid-column: 2/3;
+    grid-row: 6/7;
+    justify-self: right;
+    margin-bottom: 107px;
+}
