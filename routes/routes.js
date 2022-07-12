@@ -15,4 +15,8 @@ Router.get("/register", (req, res, next) => {
   res.render("register.ejs");
 });
 
+Router.get("/services", (req, res, next) => {
+  res.render("services.ejs")
+})
+
 export default Router;
