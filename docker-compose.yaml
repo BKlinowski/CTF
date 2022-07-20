@@ -28,11 +28,11 @@ services:
 
 secrets:
   pg_password:
-    file: pg_password.txt
+    file: ./private/pg_password.txt
   pg_user:
-    file: pg_user.txt
+    file: ./private/pg_user.txt
   pg_database:
-    file: pg_database.txt
+    file: ./private/pg_database.txt
 
 volumes:
   psql-data:

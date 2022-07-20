@@ -5,6 +5,7 @@ import session from "express-session";
 import pgSession from "connect-pg-simple"
 import { db } from "./db.js"
 import { pool } from "./db.js";
+import bcrypt from "bcrypt"
 
 const pg_store = pgSession(session)
 const app = express()
@@ -24,11 +25,14 @@ const app = express()
             email VARCHAR (255) NOT NULL,
             password TEXT NOT NULL
         );`)
+            const stephPass = await bcrypt.hash("a123456789", 8);
+            await db.query(`INSERT INTO users VALUES (default, 'Stephen', 'Nilesh', 'stephen@codeberry.pl', '${stephPass}')`)
         }
     })()
 
 dotenv.config();
-app.use(express.urlencoded({ extentended: false }))
+
+app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 app.use(express.static('public'))
 app.use(session({
@@ -37,6 +41,16 @@ app.use(session({
         createTableIfMissing: true
     }), secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false
 }))
+
+app.use((req, res, next) => {
+    console.log(req.session.user)
+    if (req.session.user == "stephen@codeberry.pl") {
+        res.write("ctf{brut3_f0rc3}")
+        res.end()
+    } else {
+        return next()
+    }
+})
 
 import routes from "./routes/routes.js"
 app.use(routes)

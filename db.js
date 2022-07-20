@@ -12,8 +12,12 @@ export const db = {
         const start = Date.now()
         const res = await pool.query(text)
         const duration = Date.now() - start
-        console.log('executed query', { text, duration, rows: res.rowCount })
+        // console.log('\nexecuted query', { text, duration, rows: res.rowCount })
         return res
+    },
+    async queryRows(text) {
+        const { rows } = await pool.query(text)
+        return rows
     },
     async getClient() {
         const client = await pool.connect()
