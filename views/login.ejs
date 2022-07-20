@@ -2,10 +2,12 @@
   <%- include("./shared/header.ejs") %>
     <!-- <main class="main__login-page"> -->
     <div class="login-form">
-      <input type="text" placeholder="LOGIN" class="login-form__login" />
-      <input type="password" placeholder="HASŁO" class="login-form__password" />
-      <button class="btn-login">ZALOGUJ</button>
-      <p class="password-reset">Zresetuj hasło</p>
-      <p class="register-link">Załóż konto</p>
+      <form action="/login" method="post">
+        <input type="text" name="email" placeholder="LOGIN" class="login-form__login" />
+        <input type="password" name="password" placeholder="HASŁO" class="login-form__password" />
+        <button type="submit" class="btn-login">ZALOGUJ</button>
+        <p class="password-reset">Zresetuj hasło</p>
+        <p class="register-link">Załóż konto</p>
+      </form>
     </div>
     <!-- </main> -->

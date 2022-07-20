@@ -1,5 +1,6 @@
 import router from "express";
 import { Route } from "express";
+import { postLogin, postRegister } from "../controllers/auth.js"
 
 const Router = router();
 
@@ -28,6 +29,7 @@ Router.get("/websites", (req, res, next) => {
 })
 
 Router.get("/mobiles", (req, res, next) => {
+  res.append("x-ctf-flag", "ctf{th4t_w4s_3asy}")
   res.render("mobiles.ejs")
 })
 
@@ -46,5 +48,14 @@ Router.get("/contact", (req, res, next) => {
 Router.get("/about-us", (req, res, next) => {
   res.render("about-us.ejs")
 })
+
+Router.get("/robots.txt", (req, res, next) => {
+  res.write("ctf{lik3_mr_r0b0t}")
+  res.end()
+})
+
+Router.post("/login", postLogin)
+
+Router.post("/register", postRegister)
 
 export default Router;

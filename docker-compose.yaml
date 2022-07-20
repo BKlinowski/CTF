@@ -1,0 +1,38 @@
+version: "3.9"
+services:
+  pg:
+    image: 'postgres'
+    volumes:
+      - 'psql-data:/var/lib/postgresql/data'
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRES_USER_FILE: /run/secrets/pg_user
+      POSTGRES_DB_FILE: /run/secrets/pg_database
+    secrets:
+      - pg_password
+      - pg_user
+      - pg_database
+
+  backend:
+    build: .
+    ports:
+      - '3000:80'
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    depends_on:
+      - pg
+    restart: always
+
+secrets:
+  pg_password:
+    file: pg_password.txt
+  pg_user:
+    file: pg_user.txt
+  pg_database:
+    file: pg_database.txt
+
+volumes:
+  psql-data:
