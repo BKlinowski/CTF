@@ -1,7 +1,7 @@
 <%- include("./shared/head.ejs") %>
     <%- include("./shared/header.ejs") %>
 
-        <div class="contact__container">
+        <form class="contact__container" onsubmit="contactUs(event)">
             <h1 class="contact__mainText">Wypełnij formularz a nasz konsultant skontaktuje się z Tobą już kolejnego
                 dnia.</h1>
             <div class="contact__firstnameContainer">
@@ -9,9 +9,8 @@
                 <input id="contact__inputFirstname" type="text" class="contact__inputFirstname">
             </div>
             <div class="contact__surnameContainer">
-
-                <label for="contact__inputSurname" class="contact__labelSurname">Nazwisko</label> <input
-                    id="contact__inputSurname" type="text" class="contact__inputSurname">
+                <label for="contact__inputSurname" class="contact__labelSurname">Nazwisko</label>
+                <input id="contact__inputSurname" type="text" class="contact__inputSurname">
             </div>
             <div class="contact__emailContainer">
 
@@ -19,9 +18,8 @@
                     id="contact__inputEmail" type="text" class="contact__inputEmail">
             </div>
             <div class="contact__telephoneContainer">
-
-                <label for="contact__inputTelephone" class="contact__labelTelephone">Numer telefonu</label> <input
-                    id="contact__inputTelephone" type="text" class="contact__inputTelephone">
+                <label for="contact__inputTelephone" class="contact__labelTelephone">Numer telefonu</label>
+                <input id="contact__inputTelephone" type="text" class="contact__inputTelephone">
             </div>
             <div class="contact__additionalInfoContainer">
                 <label for=" contact__inputAdditionalInfo" class="contact__labelAdditionalInfo">Opisz nam swoje
@@ -29,5 +27,5 @@
                 <textarea id="contact__textareaAdditionalInfo" type="text"
                     class="contact__textareaAdditionalInfo"></textarea>
             </div>
-            <button class="contact__buttonApply">Wyślij</button>
-        </div>
+            <button type="submit" class="contact__buttonApply">Wyślij</button>
+        </form>

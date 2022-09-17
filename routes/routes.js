@@ -1,6 +1,8 @@
 import router from "express";
-import { Route } from "express";
+import { Route, raw } from "express";
 import { postLogin, postRegister } from "../controllers/auth.js"
+import { postContact } from "../controllers/user.js"
+
 
 const Router = router();
 
@@ -57,5 +59,7 @@ Router.get("/robots.txt", (req, res, next) => {
 Router.post("/login", postLogin)
 
 Router.post("/register", postRegister)
+
+Router.post("/contact", raw({ type: ["application/json", "application/xml", "text/xml"] }), postContact)
 
 export default Router;

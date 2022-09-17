@@ -25,6 +25,8 @@
     "ejs": "^3.1.8",
     "express": "^4.18.1",
     "express-session": "^1.17.3",
+    "fast-xml-parser": "^4.0.10",
+    "libxmljs": "^0.19.10",
     "pg": "^8.7.3"
   },
   "devDependencies": {

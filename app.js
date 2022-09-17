@@ -34,7 +34,17 @@ dotenv.config();
 
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
-app.use(express.static('public'))
+
+app.use(express.static('public', {
+    setHeaders
+}))
+
+function setHeaders(res, path) {
+    if (path === "/app/public/js/contactUs.js") {
+        res.setHeader('Content-Type', "application/javascript")
+    }
+}
+
 app.use(session({
     store: new pg_store({
         pool: pool,
