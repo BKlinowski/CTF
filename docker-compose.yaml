@@ -12,9 +12,13 @@ services:
       - pg_password
       - pg_user
       - pg_database
+    networks:
+      - internal-network
 
   backend:
-    build: .
+    build:
+      context: ./
+      dockerfile: ./Dockerfiles/backend/Dockerfile
     ports:
       - '3000:80'
     volumes:
@@ -25,6 +29,24 @@ services:
     depends_on:
       - pg
     restart: always
+    networks:
+      - external-network
+      - internal-network
+  php:
+    build: ./Dockerfiles/PHP/
+    depends_on:
+      - backend
+    restart: always
+    volumes:
+      - ./Dockerfiles/PHP/src:/var/www/html/
+    networks:
+      - internal-network
+
+networks:
+  external-network:
+    driver: bridge
+  internal-network:
+
 
 secrets:
   pg_password:

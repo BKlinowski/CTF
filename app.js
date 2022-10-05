@@ -6,6 +6,7 @@ import pgSession from "connect-pg-simple"
 import { db } from "./db.js"
 import { pool } from "./db.js";
 import bcrypt from "bcrypt"
+import axios from "axios"
 
 const pg_store = pgSession(session)
 const app = express()
