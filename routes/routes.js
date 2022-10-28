@@ -1,6 +1,6 @@
 import router from "express";
 import { Route, raw } from "express";
-import { postLogin, postRegister } from "../controllers/auth.js"
+import { isAdmin, postLogin, postRegister, verifyActiveSession } from "../controllers/auth.js"
 import { postContact } from "../controllers/user.js"
 
 
@@ -61,5 +61,10 @@ Router.post("/login", postLogin)
 Router.post("/register", postRegister)
 
 Router.post("/contact", raw({ type: ["application/json", "application/xml", "text/xml"] }), postContact)
+
+Router.get("/admin", verifyActiveSession, isAdmin, (req, res) => {
+  res.write("You are an admin!")
+  res.end()
+})
 
 export default Router;

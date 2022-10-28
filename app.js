@@ -7,10 +7,11 @@ import { db } from "./db.js"
 import { pool } from "./db.js";
 import bcrypt from "bcryptjs"
 import axios from "axios"
+import cookieParser from "cookie-parser"
 
 const pg_store = pgSession(session)
 const app = express()
-
+app.use(cookieParser())
     ; (async () => {
         const { rows } = await db.query(`select exists(
     SELECT FROM pg_tables WHERE tablename = 'users'
@@ -50,7 +51,7 @@ app.use(session({
     store: new pg_store({
         pool: pool,
         createTableIfMissing: true
-    }), secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false
+    }), secret: process.env.SESSION_SECRET, resave: false, saveUninitialized: false, cookie: { httpOnly: false }
 }))
 
 app.use((req, res, next) => {
