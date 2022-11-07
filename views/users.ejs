@@ -1,0 +1,17 @@
+<%- include("./shared/head.ejs") %>
+    <%- include("./shared/header.ejs") %>
+        <form class="register-form" action="/register" method="post">
+            <label for="register-form__firstname">Imię</label>
+            <input name="forename" type="text" id="register-form__firstname" class="register-form__firstname">
+            <label for="register-form__surname">Nazwisko</label>
+            <input name="surname" type="text" id="register-form__surname" class="register-form__surname">
+            <label for="register-form__email">Email</label>
+            <input name="email" type="text" id="register-form__email" class="register-form__email">
+            <label for="register-form__password">Hasło</label>
+            <input name="password" type="password" id="register-form__password" class="register-form__password">
+            <button type="submit" class="btn-register">Załóż konto</button>
+        </form>
+        <!-- <%= id %> -->
+        <!-- <% for (const id in users) { %>
+            <p><%- users[id].email %></p>
+        <% } %> -->

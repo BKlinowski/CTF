@@ -1,9 +1,9 @@
 version: "3.9"
 services:
   pg:
-    image: 'postgres'
+    image: "postgres"
     volumes:
-      - 'psql-data:/var/lib/postgresql/data'
+      - "psql-data:/var/lib/postgresql/data"
     environment:
       POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
       POSTGRES_USER_FILE: /run/secrets/pg_user
@@ -14,13 +14,24 @@ services:
       - pg_database
     networks:
       - internal-network
-
+  bot:
+    build:
+      context: ./
+      dockerfile: ./Dockerfiles/bot/Dockerfile
+    volumes:
+      - ./Bot:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - internal-network
   backend:
     build:
       context: ./
       dockerfile: ./Dockerfiles/backend/Dockerfile
     ports:
-      - '3000:80'
+      - "3000:80"
     volumes:
       - ./:/app
       - /app/node_modules
@@ -46,7 +57,6 @@ networks:
   external-network:
     driver: bridge
   internal-network:
-
 
 secrets:
   pg_password:
