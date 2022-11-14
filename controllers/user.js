@@ -1,9 +1,9 @@
 import * as xmlparser from "fast-xml-parser";
+import { SocksProxyAgent } from "socks-proxy-agent";
 import axios from "axios";
+import { parse } from "url";
 
 export const postContact = (req, res) => {
-  let { XMLBuilder, XMLParser, XMLValidator } = xmlparser;
-  let { parseXml } = xmlengine;
   const contentType = req.get("Content-Type");
   console.log(contentType);
   if (contentType.includes("application/json")) {
@@ -15,9 +15,17 @@ export const postContact = (req, res) => {
     contentType.includes("application/xml") ||
     contentType.includes("text/xml")
   ) {
+    let proxy = "socks://php:1234";
+    console.log("using proxy server %j", proxy);
+    var endpoint = "http://php/xxe.php";
+    console.log("attempting to GET %j", endpoint);
+    var opts = parse(endpoint);
+    var agent = new SocksProxyAgent(proxy);
+    opts.agent = agent;
     const xmldata = Buffer.from(req.body).toString("utf8");
     axios({
       method: "post",
+      httpAgent: agent,
       url: "http://php/xxe.php",
       data: {
         xmldata,
