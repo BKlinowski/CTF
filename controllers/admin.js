@@ -16,9 +16,9 @@ export const postAddUser = async (req, res, next) => {
 };
 
 export const getUsers = async (req, res) => {
-  console.log(process.mainModule);
-  const query = `SELECT email FROM users`;
-  const users = await pool.query(query);
-  console.log(users.rows);
+  // console.log(process.mainModule);
+  // const query = `SELECT email FROM users`;
+  // const users = await pool.query(query);
+  // console.log(users.rows);
   res.render("users.ejs", req.query);
 };

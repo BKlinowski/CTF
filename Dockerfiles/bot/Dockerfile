@@ -15,8 +15,12 @@ RUN apt-get update && apt-get install gnupg wget -y && \
 
 COPY Bot/package.json .
 
+COPY waitforit.sh /waitforit.sh
+
+RUN chmod +x /waitforit.sh
+
 RUN npm install
 
 COPY Bot .
 
-CMD ["npm", "start"]
+CMD ["/waitforit.sh", "backend:80","-t", "5", "--", "npm", "start"]
