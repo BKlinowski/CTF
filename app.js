@@ -39,6 +39,8 @@ app.use(cookieParser());
   }
 })();
 
+
+
 dotenv.config();
 
 app.use(express.urlencoded({ extended: false }));
@@ -78,6 +80,7 @@ app.use((req, res, next) => {
     return next();
   }
 });
+
 
 import routes from "./routes/routes.js";
 app.use(routes);

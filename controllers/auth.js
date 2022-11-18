@@ -24,15 +24,19 @@ export const postLogin = async (req, res) => {
         JSON.stringify({ role: "user", session_id: req.session.session_id }),
         process.env.TOKEN_KEY
       );
+
+      console.log(token);
       req.session.save();
       console.log("SESSION", req.session);
-      res.cookie("token", token).redirect("/login");
+      res.cookie("token", token);
+      res.redirect("/user");
     } else {
       res.redirect("/");
     }
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
+
 };
 
 export const postRegister = async (req, res) => {
@@ -66,6 +70,7 @@ export const verifyActiveSession = async (req, res, next) => {
     const value = [session_id, role];
     const active_sessions = await pool.query(query, value);
     console.log(active_sessions.rows);
+    
     if (active_sessions.rows[0].active_session == 1) {
       return next();
     } else {
@@ -73,6 +78,28 @@ export const verifyActiveSession = async (req, res, next) => {
       res.end();
     }
   }
+};
+
+
+
+export const logout = async (req, res, next) => {
+  req.session.destroy((err) => {
+    res.redirect('/') 
+  })
+};
+
+export const getuser = async (req, res, next) => {
+  
+  const email = req.session.user;
+  const [user] = await db.queryRows(
+    `SELECT forename FROM users WHERE email = '${email}' LIMIT 1`
+  );
+
+  const user_name = user['forename'];
+  console.log("user name", user_name);
+  
+  res.render("user.ejs", { response: user_name, isLoggedIn: req.session.user});
+
 };
 
 export const isAdmin = (req, res, next) => {
@@ -87,7 +114,7 @@ export const isAdmin = (req, res, next) => {
     const body = token.split(".")[1];
     let buff = Buffer.from(body, "base64url");
     let text = buff.toString("ascii");
-    // console.log(text);
+    console.log(text);
     console.log("DECODED: ", decoded);
     console.log(decoded.payload.role);
     if (decoded.payload.role != "admin") {
