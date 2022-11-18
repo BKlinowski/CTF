@@ -1,0 +1,28 @@
+<%- include("./shared/head.ejs") %>
+    <%- include("./shared/header.ejs") %>
+
+        <div class="career__container">
+            <h1 class="career__mainText">Wypełnij formularz a w ciągu 2 tygodni skontaktujemy się z Tobą.</h1>
+            <div class="career__firstnameContainer">
+                <label for="career__inputFirstname" class="career__labelFirstname">Imię</label>
+                <input id="career__inputFirstname" type="text" class="career__inputFirstname">
+            </div>
+            <div class="career__surnameContainer">
+
+                <label for="career__inputSurname" class="career__labelSurname">Nazwisko</label> <input
+                    id="career__inputSurname" type="text" class="career__inputSurname">
+            </div>
+            <div class="career__emailContainer">
+
+                <label for="career__inputEmail" class="career__labelEmail">Email</label> <input id="career__inputEmail"
+                    type="text" class="career__inputEmail">
+            </div>
+            <button class="career__buttonCV">Dodaj CV</button>
+            <div class="career__additionalInfoContainer">
+                <label for=" career__inputAdditionalInfo" class="career__labelAdditionalInfo">Informacje dodatkowe -
+                    napisz nam coś o sobie!</label>
+                <textarea id="career__textareaAdditionalInfo" type="text"
+                    class="career__textareaAdditionalInfo"></textarea>
+            </div>
+            <button class="career__buttonApply">Aplikuj</button>
+        </div>

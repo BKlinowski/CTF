@@ -1,0 +1,31 @@
+<%- include("./shared/head.ejs") %>
+    <%- include("./shared/header.ejs") %>
+
+        <form class="contact__container" onsubmit="contactUs(event)">
+            <h1 class="contact__mainText">Wypełnij formularz a nasz konsultant skontaktuje się z Tobą już kolejnego
+                dnia.</h1>
+            <div class="contact__firstnameContainer">
+                <label for="contact__inputFirstname" class="contact__labelFirstname">Imię</label>
+                <input id="contact__inputFirstname" type="text" class="contact__inputFirstname">
+            </div>
+            <div class="contact__surnameContainer">
+                <label for="contact__inputSurname" class="contact__labelSurname">Nazwisko</label>
+                <input id="contact__inputSurname" type="text" class="contact__inputSurname">
+            </div>
+            <div class="contact__emailContainer">
+
+                <label for="contact__inputEmail" class="contact__labelEmail">Email</label> <input
+                    id="contact__inputEmail" type="text" class="contact__inputEmail">
+            </div>
+            <div class="contact__telephoneContainer">
+                <label for="contact__inputTelephone" class="contact__labelTelephone">Numer telefonu</label>
+                <input id="contact__inputTelephone" type="text" class="contact__inputTelephone">
+            </div>
+            <div class="contact__additionalInfoContainer">
+                <label for=" contact__inputAdditionalInfo" class="contact__labelAdditionalInfo">Opisz nam swoje
+                    potrzeby</label>
+                <textarea id="contact__textareaAdditionalInfo" type="text"
+                    class="contact__textareaAdditionalInfo"></textarea>
+            </div>
+            <button type="submit" class="contact__buttonApply">Wyślij</button>
+        </form>

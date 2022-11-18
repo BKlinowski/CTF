@@ -1,0 +1,72 @@
+html {
+    height: 100vh;
+}
+
+body {
+    height: 100%;
+}
+
+.main-macbook {
+    background-size: contain;
+    min-height: 427px;
+    background-attachment: scroll;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+main {
+    word-wrap: break-word;
+}
+
+main p {
+    /* display: block; */
+    width: 80%;
+    margin: 0 auto;
+    height: auto;
+    text-align: center;
+    margin-top: 154px;
+    font-family: 'Bellefair';
+    font-style: normal;
+    font-weight: 400;
+    font-size: 45px;
+    /* line-height: 1px; */
+    letter-spacing: 0.01em;
+    white-space: pre-wrap;
+}
+
+@media screen and (min-width:1200px) {
+    .main-macbook {
+        margin: 60px 0;
+        background-image: url("../img/macbook_m.jpg");
+    }
+}
+
+@media screen and (max-width:1199px) {
+    .main-macbook {
+        margin: 60px 0;
+        background-image: url("../img/macbook_m.jpg");
+    }
+}
+
+@media (max-width: 991px) {
+    .main-macbook {
+        min-height: 1024px;
+        margin: 60px 0;
+        background-image: url("../img/macbook_m.jpg");
+    }
+}
+
+@media (max-width: 767px) {
+    .main-macbook {
+        background-image: url("../img/macbook_s.jpg");
+        background-size: 640px;
+        min-height: 474px;
+    }
+}
+
+@media (max-width: 575px) {
+    .main-macbook {
+        min-height: 474px;
+        background-image: url("../img/macbook_s.jpg");
+    }
+}

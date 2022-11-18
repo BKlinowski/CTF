@@ -1,0 +1,70 @@
+version: "3.9"
+services:
+  pg:
+    image: "postgres"
+    volumes:
+      - "psql-data:/var/lib/postgresql/data"
+    environment:
+      POSTGRES_PASSWORD_FILE: /run/secrets/pg_password
+      POSTGRES_USER_FILE: /run/secrets/pg_user
+      POSTGRES_DB_FILE: /run/secrets/pg_database
+    secrets:
+      - pg_password
+      - pg_user
+      - pg_database
+    networks:
+      - internal-network
+  bot:
+    build:
+      context: ./
+      dockerfile: ./Dockerfiles/bot/Dockerfile
+    volumes:
+      - ./Bot:/app
+      - /app/node_modules
+    depends_on:
+      - backend
+    restart: always
+    networks:
+      - internal-network
+  backend:
+    build:
+      context: ./
+      dockerfile: ./Dockerfiles/backend/Dockerfile
+    ports:
+      - "3000:80"
+    volumes:
+      - ./:/app
+      - /app/node_modules
+    env_file:
+      - ./.env
+    depends_on:
+      - pg
+    restart: always
+    networks:
+      - external-network
+      - internal-network
+  php:
+    build: ./Dockerfiles/PHP/
+    depends_on:
+      - backend
+    restart: always
+    volumes:
+      - ./Dockerfiles/PHP/src:/var/www/html/
+    networks:
+      - internal-network
+
+networks:
+  external-network:
+    driver: bridge
+  internal-network:
+
+secrets:
+  pg_password:
+    file: ./private/pg_password.txt
+  pg_user:
+    file: ./private/pg_user.txt
+  pg_database:
+    file: ./private/pg_database.txt
+
+volumes:
+  psql-data:

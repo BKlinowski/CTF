@@ -1,0 +1,38 @@
+.aboutUs__container {
+    width: calc(100% - 200px);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin: 100px auto;
+}
+
+.aboutUs__rightSidebar {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    justify-self: center;
+}
+
+.aboutUs__container h1 {
+    font-size: 30px;
+    line-height: 37px;
+}
+
+.aboutUs__container p {
+    font-size: 25px;
+    width: 100%;
+    line-height: 30px;
+}
+
+.aboutUs__card {
+    width: 450px;
+    height: 40px;
+    padding: 5px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.3);
+    border-radius: 4px;
+    font-size: 25px;
+    line-height: 30px;
+    text-align: center;
+    color: #000000;
+    margin-bottom: 40px;
+}
