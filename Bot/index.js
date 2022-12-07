@@ -8,7 +8,6 @@ import puppeteer from "puppeteer";
   const [page] = await browser.pages();
   await page.setDefaultNavigationTimeout(0);
   await page.goto("http://backend:80/login", { waitUntil: "networkidle0" });
-
   await page.type("#login__email", "thief@codeberry.pl");
   await page.type(
     "#login__password",
@@ -16,14 +15,11 @@ import puppeteer from "puppeteer";
   );
   await Promise.all([
     page.click(".btn-login"),
-    page.waitForNavigation({ waitUntil: "networkidle0" }),
   ]);
 
   setInterval(async () => {
-    await page.goto("http://backend:80/services", {
-      waitUntil: "networkidle0",
+    await page.goto("http://backend:80/feedback", {
     });
   }, 1000);
 
-  await browser.close();
 })();
