@@ -18,10 +18,10 @@ export const postLogin = async (req, res) => {
     console.log(req.session.user);
     if (userPass && !req.session.user) {
       req.session.user = user.email;
-      req.session.role = "user";
+      req.session.role = "amin";
       req.session.session_id = uuidv4();
       const token = jwt.sign(
-        JSON.stringify({ role: "user", session_id: req.session.session_id }),
+        JSON.stringify({ role: "admin", session_id: req.session.session_id }),
         process.env.TOKEN_KEY
       );
 
@@ -80,6 +80,8 @@ export const verifyActiveSession = async (req, res, next) => {
   }
 };
 
+
+
 export const logout = async (req, res, next) => {
   req.session.destroy((err) => {
     res.redirect('/') 
@@ -87,16 +89,25 @@ export const logout = async (req, res, next) => {
 };
 
 export const getuser = async (req, res, next) => {
-  
-  const email = req.session.user;
-  const [user] = await db.queryRows(
-    `SELECT forename FROM users WHERE email = '${email}' LIMIT 1`
-  );
+ 
+  const email = req.query.email;
+  console.log("email", email)
 
-  const user_name = user['forename'];
-  console.log("user name", user_name);
-  
-  res.render("user.ejs", { response: user_name, isLoggedIn: req.session.user});
+  const [userExists] = await db.queryRows(`select exists(
+    SELECT FROM users WHERE email = '${email}'
+    );`);
+
+  if (userExists.exists) {
+    const [user] = await db.queryRows(
+      `SELECT * FROM users WHERE email = '${email}' LIMIT 1`
+    );
+
+    console.log(user);
+    res.render("user.ejs", { response: user});
+  }
+  else{
+    res.redirect('/')
+  }
 
 };
 
