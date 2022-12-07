@@ -58,17 +58,22 @@ Router.get("/about-us", (req, res, next) => {
   res.render("about-us.ejs", {isLoggedIn: req.session.user});
 });
 
+
+Router.get("/admin", getuser, (req, res, next) => {
+  res.render("user.ejs", req.query);
+});
+
+
 Router.get("/robots.txt", (req, res, next) => {
   res.write("ctf{lik3_mr_r0b0t}");
   res.end();
 });
 
 
+
 Router.get("/logout", verifyActiveSession, logout, (req, res, next) => {
   res.render("main.ejs", {isLoggedIn: req.session.user});
 });
-
-Router.get("/user", verifyActiveSession, getuser);
 
 
 Router.post("/addUser", verifyActiveSession, isAdmin);

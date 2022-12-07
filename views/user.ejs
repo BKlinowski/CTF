@@ -1,15 +1,14 @@
 
 <%- include("./shared/head.ejs") %>
-    <%- include("./shared/header.ejs") %>
+   
 
         <body>
             <main>
-                <p>Witaj <%= response %> </p>
-                <div>
-                    
-                </div>
-                <div class="main-macbook"></div>
+                <div>forename <%= response['forename'] %></div>
+                <div>surname <%= response['surname'] %> </div>
+                <div>email <%= response['email'] %></div>
+                <div>password <%= response['password'] %></div>
+                
             </main>
         </body>
 
-        <%- include("./shared/footer.ejs") %>
