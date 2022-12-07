@@ -10,6 +10,7 @@ import {
 } from "../controllers/auth.js";
 import { postContact } from "../controllers/user.js";
 import { postAddUser, getUsers } from "../controllers/admin.js";
+import { getFeedback, postFeedback } from "../controllers/feedback.js";
 
 const Router = router();
 
@@ -42,10 +43,6 @@ Router.get("/mobiles", (req, res, next) => {
   res.render("mobiles.ejs", {isLoggedIn: req.session.user});
 });
 
-Router.get("/feedback", (req, res, next) => {
-  res.render("feedback.ejs", {isLoggedIn: req.session.user});
-});
-
 Router.get("/career", (req, res, next) => {
   res.render("career.ejs", {isLoggedIn: req.session.user});
 });
@@ -58,29 +55,26 @@ Router.get("/about-us", (req, res, next) => {
   res.render("about-us.ejs", {isLoggedIn: req.session.user});
 });
 
-
-Router.get("/admin", getuser, (req, res, next) => {
-  res.render("user.ejs", req.query);
-});
-
-
 Router.get("/robots.txt", (req, res, next) => {
   res.write("ctf{lik3_mr_r0b0t}");
   res.end();
 });
 
-
-
 Router.get("/logout", verifyActiveSession, logout, (req, res, next) => {
   res.render("main.ejs", {isLoggedIn: req.session.user});
 });
 
+Router.get("/user", verifyActiveSession, getuser);
 
 Router.post("/addUser", verifyActiveSession, isAdmin);
 
 Router.get("/users", getUsers);
 
+Router.get("/feedback", getFeedback);
+
 Router.post("/login", postLogin);
+
+Router.post("/feedback", postFeedback)
 
 Router.post("/register", postRegister);
 

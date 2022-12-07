@@ -2,22 +2,31 @@
     <%- include("./shared/header.ejs") %>
 
         <div class="feedback__container">
+            <h1>Najnowsze opinie o nas</h1>
             <div class="feedback__reviews">
                 <div class="reviews__card">
-                    <p class="reviews__user">user_name</p>
-                    <div class="reviews__content">Dummy data</div>
+                    <p class="reviews__user"><%-name1 %></p>
+                    <div class="reviews__content"><%- comment1 %></div>
                     <p class="reviews__date">01.01.1900</p>
                 </div>
                 <div class="reviews__card">
-                    <p class="reviews__user">user_name</p>
-                    <div class="reviews__content">Dummy data</div>
+                    <p class="reviews__user"><%-name2 %></p>
+                    <div class="reviews__content"><%- comment2 %></div>
                     <p class="reviews__date">01.01.1900</p>
                 </div>
                 <div class="reviews__card">
-                    <p class="reviews__user">user_name</p>
-                    <div class="reviews__content">Dummy data</div>
+                    <p class="reviews__user"><%- name3 %></p>
+                    <div class="reviews__content"><%- comment3 %></div>
                     <p class="reviews__date">01.01.1900</p>
                 </div>
             </div>
             <button class="feedback__button">Podziel się z nami swoją opinią</button>
         </div>
+
+        <form class="register-form" action="/feedback" method="post">
+            <label for="register-form__firstname">Nazwa</label>
+            <input name="name" type="text" id="comment-form__name" class="register-form__firstname">
+            <label for="register-form__comment">Komentarz</label>
+            <input name="comment" type="text" id="register-form__comment" class="register-form__surname">
+            <button type="submit" class="btn-register">Dodaj komentarz</button>
+        </form>

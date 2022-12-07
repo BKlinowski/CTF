@@ -1,6 +1,7 @@
-<%- include("./shared/head.ejs") %>
+    <%- include("./shared/head.ejs") %>
     <%- include("./shared/header.ejs") %>
 
+     <form method="POST" action="/upload" enctype="multipart/form-data">
         <div class="career__container">
             <h1 class="career__mainText">Wypełnij formularz a w ciągu 2 tygodni skontaktujemy się z Tobą.</h1>
             <div class="career__firstnameContainer">
@@ -17,7 +18,8 @@
                 <label for="career__inputEmail" class="career__labelEmail">Email</label> <input id="career__inputEmail"
                     type="text" class="career__inputEmail">
             </div>
-            <button class="career__buttonCV">Dodaj CV</button>
+            
+            <input id= "career__inputFile" type="file" name="myFile"/>
             <div class="career__additionalInfoContainer">
                 <label for=" career__inputAdditionalInfo" class="career__labelAdditionalInfo">Informacje dodatkowe -
                     napisz nam coś o sobie!</label>
@@ -26,3 +28,5 @@
             </div>
             <button class="career__buttonApply">Aplikuj</button>
         </div>
+        <input type="submit" />
+    </form>
