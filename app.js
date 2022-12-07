@@ -8,6 +8,7 @@ import { pool } from "./db.js";
 import bcrypt from "bcryptjs";
 import axios from "axios";
 import cookieParser from "cookie-parser";
+import fileUpload from "express-fileupload";
 
 const pg_store = pgSession(session);
 const app = express();
@@ -28,6 +29,11 @@ app.use(cookieParser());
             email VARCHAR (255) NOT NULL,
             password TEXT NOT NULL
         );`);
+    await db.query(`CREATE TABLE comments (
+            id SERIAL PRIMARY KEY,
+            name VARCHAR(255) NOT NULL,
+            comment TEXT NOT NULL
+        );`);  
     const stephPass = await bcrypt.hash("a123456789", 8);
     const thiefPass = await bcrypt.hash(
       "$GgK2MN##2zy^8mdKP$iPF$Y^CBm2!h#Yf*R*7fdSf@XqXt2UgW8P2XN!Wy4GCW#",
@@ -36,9 +42,12 @@ app.use(cookieParser());
     await db.query(
       `INSERT INTO users VALUES (default, 'Stephen', 'Nilesh', 'stephen@codeberry.pl', '${stephPass}'), (default, 'John', 'Thief', 'thief@codeberry.pl', '${thiefPass}')`
     );
+    await db.query(
+      `INSERT INTO comments VALUES (default, 'Ty', 'Miejsce na Twoj komentarz'),(default, 'Ty', 'Miejsce na Twoj komentarz'),(default, 'Ty', 'Miejsce na Twoj komentarz')`
+      );
+
   }
 })();
-
 
 
 dotenv.config();
@@ -81,6 +90,13 @@ app.use((req, res, next) => {
   }
 });
 
+app.use(fileUpload({
+  limits: {
+      fileSize: 1024 * 1024 
+  },
+  abortOnLimit: true,
+  responseOnLimit: true
+}));
 
 import routes from "./routes/routes.js";
 app.use(routes);
