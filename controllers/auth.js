@@ -43,9 +43,10 @@ export const postRegister = async (req, res) => {
   const { forename, surname, email, password } = req.body;
   const hashedPass = await bcrypt.hash(password, 14);
   try {
-    await db.query(
-      `INSERT INTO users VALUES (default, '${forename}', '${surname}', '${email}', '${hashedPass}')`
-    );
+    const query = "INSERT INTO users VALUES (default, $1, $2, $3, $4)"
+    const params = [forename, surname, email, hashedPass]
+
+    await pool.query(query, params);
   } catch (error) {
     console.error(error);
   }
@@ -70,7 +71,7 @@ export const verifyActiveSession = async (req, res, next) => {
     const value = [session_id, role];
     const active_sessions = await pool.query(query, value);
     console.log(active_sessions.rows);
-    
+
     if (active_sessions.rows[0].active_session == 1) {
       return next();
     } else {
@@ -84,31 +85,8 @@ export const verifyActiveSession = async (req, res, next) => {
 
 export const logout = async (req, res, next) => {
   req.session.destroy((err) => {
-    res.redirect('/') 
-  })
-};
-
-export const getuser = async (req, res, next) => {
- 
-  const email = req.query.email;
-  console.log("email", email)
-
-  const [userExists] = await db.queryRows(`select exists(
-    SELECT FROM users WHERE email = '${email}'
-    );`);
-
-  if (userExists.exists) {
-    const [user] = await db.queryRows(
-      `SELECT * FROM users WHERE email = '${email}' LIMIT 1`
-    );
-
-    console.log(user);
-    res.render("user.ejs", { response: user});
-  }
-  else{
     res.redirect('/')
-  }
-
+  })
 };
 
 export const isAdmin = (req, res, next) => {

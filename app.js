@@ -1,72 +1,54 @@
 import express from "express";
 import dotenv from "dotenv";
-import ejs from "ejs";
 import session from "express-session";
 import pgSession from "connect-pg-simple";
-import { db } from "./db.js";
-import { pool } from "./db.js";
 import bcrypt from "bcryptjs";
-import axios from "axios";
 import cookieParser from "cookie-parser";
 import fileUpload from "express-fileupload";
+import { readFileSync } from 'node:fs';
+
+import { db } from "./db.js";
+import { pool } from "./db.js";
+import routes from "./routes/routes.js";
 
 const pg_store = pgSession(session);
 const app = express();
-app.use(cookieParser());
-(async () => {
+
+const setHeaders = (res, path) => {
+  if (path === "/app/public/js/contactUs.js") {
+    res.setHeader("Content-Type", "application/javascript");
+  }
+}
+
+
+const init = async () => {
   const { rows } = await db.query(`select exists(
     SELECT FROM pg_tables WHERE tablename = 'users'
     );`);
-  console.log();
-  if (rows[0].exists) {
-    console.log(rows[0]);
-    await db.query("SELECT * FROM users");
-  } else {
-    await db.query(`CREATE TABLE users (
-            id SERIAL PRIMARY KEY,
-            forename VARCHAR(255) NOT NULL,
-            surname VARCHAR(255) NOT NULL,
-            email VARCHAR (255) NOT NULL,
-            password TEXT NOT NULL
-        );`);
-    await db.query(`CREATE TABLE comments (
-            id SERIAL PRIMARY KEY,
-            name VARCHAR(255) NOT NULL,
-            comment TEXT NOT NULL
-        );`);  
+  if (!rows[0].exists) {
+    const sqlquery = readFileSync("./sql/query.sql")
+    await db.query(sqlquery)
     const stephPass = await bcrypt.hash("a123456789", 8);
     const thiefPass = await bcrypt.hash(
       "$GgK2MN##2zy^8mdKP$iPF$Y^CBm2!h#Yf*R*7fdSf@XqXt2UgW8P2XN!Wy4GCW#",
       10
     );
     await db.query(
-      `INSERT INTO users VALUES (default, 'Stephen', 'Nilesh', 'stephen@codeberry.pl', '${stephPass}'), (default, 'John', 'Thief', 'thief@codeberry.pl', '${thiefPass}')`
+      `INSERT INTO users VALUES (default, 'Stephen', 'Nilesh', 'stephen@codeberry.pl', '${stephPass}'), 
+      (default, 'John', 'Thief', 'thief@codeberry.pl', '${thiefPass}')`
     );
-    await db.query(
-      `INSERT INTO comments VALUES (default, 'Ty', 'Miejsce na Twoj komentarz'),(default, 'Ty', 'Miejsce na Twoj komentarz'),(default, 'Ty', 'Miejsce na Twoj komentarz')`
-      );
-
   }
-})();
+}
+init()
 
-
-dotenv.config();
-
+app.use(cookieParser());
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
-
 app.use(
   express.static("public", {
     setHeaders,
   })
 );
-
-function setHeaders(res, path) {
-  if (path === "/app/public/js/contactUs.js") {
-    res.setHeader("Content-Type", "application/javascript");
-  }
-}
-
 app.use(
   session({
     store: new pg_store({
@@ -79,9 +61,14 @@ app.use(
     cookie: { httpOnly: false },
   })
 );
-
+app.use(fileUpload({
+  limits: {
+    fileSize: 1024 * 1024
+  },
+  abortOnLimit: true,
+  responseOnLimit: true
+}));
 app.use((req, res, next) => {
-  console.log(req.session.user);
   if (req.session.user == "stephen@codeberry.pl") {
     res.write("ctf{brut3_f0rc3}");
     res.end();
@@ -90,22 +77,27 @@ app.use((req, res, next) => {
   }
 });
 
-app.use(fileUpload({
-  limits: {
-      fileSize: 1024 * 1024 
-  },
-  abortOnLimit: true,
-  responseOnLimit: true
-}));
+dotenv.config();
 
-import routes from "./routes/routes.js";
+
+
+
+
+
+
+
+
+
+
+
+
 app.use(routes);
+
+
 
 app.listen(process.env.PORT || 80, function () {
   console.log(
-    `Server listening for connection requests on socket localhost: ${
-      process.env.PORT || 80
+    `Server listening for connection requests on socket localhost: ${process.env.PORT || 80
     }`
   );
 });
-//

@@ -41,7 +41,6 @@ services:
       - pg
     restart: always
     networks:
-      - external-network
       - internal-network
   php:
     build: ./Dockerfiles/PHP/
@@ -54,9 +53,8 @@ services:
       - internal-network
 
 networks:
-  external-network:
-    driver: bridge
   internal-network:
+
 
 secrets:
   pg_password:

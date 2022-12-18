@@ -1,24 +1,24 @@
-import bcrypt from "bcryptjs";
-import { db, pool } from "../db.js";
-import ejs from "ejs";
+export const getUserInfo = async (req, res) => {
+  const email = req.query.email;
+  console.log("email", email)
 
-export const postAddUser = async (req, res, next) => {
-  const { forename, surname, email, password } = req.body;
-  const hashedPass = await bcrypt.hash(password, 14);
-  try {
-    await db.query(
-      `INSERT INTO users VALUES (default, '${forename}', '${surname}', '${email}', '${hashedPass}')`
+  const [userExists] = await db.queryRows(`select exists(
+    SELECT FROM users WHERE email = '${email}'
+    );`);
+
+  if (userExists.exists) {
+    const [user] = await db.queryRows(
+      `SELECT * FROM users WHERE email = '${email}' LIMIT 1`
     );
-  } catch (error) {
-    console.error(error);
+
+    console.log(user);
+    res.render("user.ejs", { response: user, query: req.query });
   }
-  res.redirect("/login");
+  else {
+    res.redirect('/')
+  }
 };
 
-export const getUsers = async (req, res) => {
-  // console.log(process.mainModule);
-  // const query = `SELECT email FROM users`;
-  // const users = await pool.query(query);
-  // console.log(users.rows);
-  res.render("users.ejs", req.query);
-};
+export const getAdminPage = async (req, res) => {
+  res.render("admin.ejs")
+}
