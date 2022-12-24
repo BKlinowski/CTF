@@ -1,10 +1,26 @@
-<%- include("./shared/head.ejs") %>
-  <%- include("./shared/header.ejs") %>
-    <!-- <main class="main__login-page"> -->
-    <form action="/login" onsubmit="postLogin(event)" method="post" class="login-form">
-      <input id="login__email" type="text" name="email" placeholder="LOGIN" class="login-form__login" />
-      <input id="login__password" type="password" name="password" placeholder="HASŁO" class="login-form__password" />
-      <button type="submit" class="btn-login">ZALOGUJ</button>
-      <a class="register-link" href="/register">Załóż konto</a>
-    </form>
-    <!-- </main> -->
+<%- include("./shared/head.ejs") %> <%- include("./shared/header.ejs") %>
+<!-- <main class="main__login-page"> -->
+<form
+  action="/login"
+  onsubmit="postLogin(event)"
+  method="post"
+  class="login-form"
+>
+  <input
+    id="login__email"
+    type="text"
+    name="email"
+    placeholder="LOGIN"
+    class="login-form__login"
+  />
+  <input
+    id="login__password"
+    type="password"
+    name="password"
+    placeholder="HASŁO"
+    class="login-form__password"
+  />
+  <button type="submit" class="btn-login">ZALOGUJ</button>
+  <a class="register-link" href="/register">Załóż konto</a>
+</form>
+<!-- </main> -->

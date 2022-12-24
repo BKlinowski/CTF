@@ -1,4 +1,4 @@
-`CREATE TABLE users (
+CREATE TABLE users (
             id SERIAL PRIMARY KEY,
             forename VARCHAR(255) NOT NULL,
             surname VARCHAR(255) NOT NULL,
@@ -11,4 +11,3 @@ CREATE TABLE comments (
             comment TEXT NOT NULL
         );
 INSERT INTO comments VALUES (default, 'Ty', 'Miejsce na Twoj komentarz'),(default, 'Ty', 'Miejsce na Twoj komentarz'),(default, 'Ty', 'Miejsce na Twoj komentarz');
-`

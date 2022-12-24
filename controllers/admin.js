@@ -1,6 +1,6 @@
 export const getUserInfo = async (req, res) => {
   const email = req.query.email;
-  console.log("email", email)
+  console.log("email", email);
 
   const [userExists] = await db.queryRows(`select exists(
     SELECT FROM users WHERE email = '${email}'
@@ -12,13 +12,26 @@ export const getUserInfo = async (req, res) => {
     );
 
     console.log(user);
-    res.render("user.ejs", { response: user, query: req.query });
-  }
-  else {
-    res.redirect('/')
+    res.render(
+      "users.ejs",
+      {
+        response: user,
+        query: req.query,
+        isLoggedIn: req.session.user,
+        isAdmin: req.session.role,
+      },
+      undefined,
+      (err, html) => {
+        if (err) throw new Error("Something went wrong in render");
+        var processed = process(html);
+        res.send(processed);
+      }
+    );
+  } else {
+    res.redirect("/");
   }
 };
 
-export const getAdminPage = async (req, res) => {
-  res.render("admin.ejs")
-}
+// export const getAdminPage = async (req, res) => {
+//   res.render("admin.ejs")
+// }

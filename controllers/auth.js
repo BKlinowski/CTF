@@ -16,12 +16,12 @@ export const postLogin = async (req, res) => {
     const userPass = await bcrypt.compare(password, user.password);
     // console.log(userPass)
     console.log(req.session.user);
-    if (userPass && !req.session.user) {
+    if (userPass && !req.session.user && !req.session.role) {
       req.session.user = user.email;
-      req.session.role = "amin";
+      req.session.role = "user";
       req.session.session_id = uuidv4();
       const token = jwt.sign(
-        JSON.stringify({ role: "admin", session_id: req.session.session_id }),
+        JSON.stringify({ role: "user", session_id: req.session.session_id }),
         process.env.TOKEN_KEY
       );
 
@@ -36,15 +36,14 @@ export const postLogin = async (req, res) => {
   } else {
     res.redirect("/");
   }
-
 };
 
 export const postRegister = async (req, res) => {
   const { forename, surname, email, password } = req.body;
   const hashedPass = await bcrypt.hash(password, 14);
   try {
-    const query = "INSERT INTO users VALUES (default, $1, $2, $3, $4)"
-    const params = [forename, surname, email, hashedPass]
+    const query = "INSERT INTO users VALUES (default, $1, $2, $3, $4)";
+    const params = [forename, surname, email, hashedPass];
 
     await pool.query(query, params);
   } catch (error) {
@@ -56,63 +55,114 @@ export const postRegister = async (req, res) => {
 export const verifyActiveSession = async (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(403).send("A token is required for authentication");
+    return res.status(403).render(
+      "not-admin.ejs",
+      {
+        text: "Token jest wymagany do autoryzacji",
+        isLoggedIn: req.session.user,
+        role: req.session.role,
+      },
+      (err, html) => {
+        if (err) throw new Error("Something went wrong in render");
+        res.send(html);
+      }
+    );
   } else {
     const body = token.split(".")[1];
     let buff = Buffer.from(body, "base64url");
     let text = buff.toString("ascii");
-    console.log(text);
     let re = /("role":\s*("[a-z]*"))/;
     const role = text.match(re)[2].slice(1, -1);
-    console.log(role);
     re = /("session_id":\s*("[a-z0-9-]*"))/;
     const session_id = text.match(re)[2].slice(1, -1);
+    console.log(session_id, role);
     const query = `SELECT COUNT(*)::int as ACTIVE_SESSION FROM session WHERE sess->>'session_id'=$1 AND sess->>'role'=$2`;
     const value = [session_id, role];
     const active_sessions = await pool.query(query, value);
     console.log(active_sessions.rows);
-
     if (active_sessions.rows[0].active_session == 1) {
       return next();
     } else {
-      res.write("Your session isn't active :<");
-      res.end();
+      return res.status(403).render(
+        "not-admin.ejs",
+        {
+          text: "Twoja sesja nie jest aktywna",
+          isLoggedIn: req.session.user,
+          role: req.session.role,
+        },
+        (err, html) => {
+          if (err) throw new Error("Something went wrong in render");
+          res.send(html);
+        }
+      );
     }
   }
 };
 
-
-
 export const logout = async (req, res, next) => {
   req.session.destroy((err) => {
-    res.redirect('/')
-  })
+    res.redirect("/");
+  });
 };
 
 export const isAdmin = (req, res, next) => {
   const token = req.cookies.token;
   if (!token) {
-    return res.status(403).send("A token is required for authentication");
+    return res.status(403).render(
+      "not-admin.ejs",
+      {
+        text: "Token jest wymagany do autoryzacji",
+        isLoggedIn: req.session.user,
+        role: req.session.role,
+      },
+      (err, html) => {
+        if (err) throw new Error("Something went wrong in render");
+        res.send(html);
+      }
+    );
   }
   try {
     const decoded = jwt.verify(token, process.env.TOKEN_KEY, {
       complete: true,
     });
-    const body = token.split(".")[1];
-    let buff = Buffer.from(body, "base64url");
-    let text = buff.toString("ascii");
-    console.log(text);
-    console.log("DECODED: ", decoded);
-    console.log(decoded.payload.role);
     if (decoded.payload.role != "admin") {
-      return res.status(403).send("You are not an admin :<");
+      return res.status(403).render(
+        "not-admin.ejs",
+        {
+          text: "Twoją rolą nie jest admin, nie masz uprawnień do wyświetlenia tej strony",
+          isLoggedIn: req.session.user,
+          role: req.session.role,
+        },
+        (err, html) => {
+          if (err) throw new Error("Something went wrong in render");
+
+          res.send(html);
+        }
+      );
     } else {
-      console.log(decoded.role);
-      return res.send("Congratulations! You are an admin!");
+      return res.render(
+        "admin.ejs",
+        { isLoggedIn: req.session.user, role: "admin" },
+        (err, html) => {
+          if (err) throw new Error("Something went wrong in render");
+
+          res.send(html);
+        }
+      );
     }
   } catch (err) {
     console.log(err);
-    return res.status(401).send("Invalid Token");
+    return res.status(403).render(
+      "not-admin.ejs",
+      {
+        text: "Błędny token",
+        isLoggedIn: req.session.user,
+        role: req.session.role,
+      },
+      (err, html) => {
+        if (err) throw new Error("Something went wrong in render");
+        res.send(html);
+      }
+    );
   }
-  return next();
 };
