@@ -1,34 +1,28 @@
+import { db } from "../db.js";
+
 export const getUserInfo = async (req, res) => {
   const email = req.query.email;
-  console.log("email", email);
 
-  const [userExists] = await db.queryRows(`select exists(
-    SELECT FROM users WHERE email = '${email}'
-    );`);
+  const [userExists] = await db.queryRows(
+    "select exists(SELECT FROM users WHERE email = $1);",
+    [email]
+  );
 
   if (userExists.exists) {
     const [user] = await db.queryRows(
-      `SELECT * FROM users WHERE email = '${email}' LIMIT 1`
+      "select exists(SELECT FROM users WHERE email = $1);",
+      [email]
     );
-
-    console.log(user);
-    res.render(
-      "users.ejs",
-      {
-        response: user,
-        query: req.query,
-        isLoggedIn: req.session.user,
-        isAdmin: req.session.role,
-      },
-      undefined,
+    req.query.user = user;
+    req.query.role = "admin";
+    req.query.isLoggedIn = true;
+    res.render("users.ejs", req.query),
       (err, html) => {
-        if (err) throw new Error("Something went wrong in render");
-        var processed = process(html);
-        res.send(processed);
-      }
-    );
-  } else {
-    res.redirect("/");
+        console.error(err);
+        res.render("error.ejs", {
+          message: "Something went wrong in render",
+        });
+      };
   }
 };
 

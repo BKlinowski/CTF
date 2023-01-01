@@ -1,8 +1,11 @@
 <%- include("./shared/head.ejs") %> <%- include("./shared/header.ejs") %>
-<main>
-  <div>forename <%= response['forename'] %></div>
-  <div>surname <%= response['surname'] %></div>
-  <div>email <%= response['email'] %></div>
-  <div>password <%= response['password'] %></div>
+<main class="users__container">
+  <div class="users__items">
+    <div>Pytasz o użytkownika: <%= email %></div>
+    <div>forename <%= user['forename'] %></div>
+    <div>surname <%= user['surname'] %></div>
+    <div>email <%= user['email'] %></div>
+    <div>password <%= user['password'] %></div>
+  </div>
 </main>
 <%- include("./shared/footer.ejs") %>

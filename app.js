@@ -32,14 +32,14 @@ const init = async () => {
       "$GgK2MN##2zy^8mdKP$iPF$Y^CBm2!h#Yf*R*7fdSf@XqXt2UgW8P2XN!Wy4GCW#",
       10
     );
+    const testPass = await bcrypt.hash("Ct2T!f#6W9jwL9#Lzyqi", 10);
     await db.query(
       `INSERT INTO users VALUES (default, 'Stephen', 'Nilesh', 'stephen@codeberry.pl', '${stephPass}'), 
-      (default, 'John', 'Thief', 'thief@codeberry.pl', '${thiefPass}')`
+      (default, 'John', 'Thief', 'thief@codeberry.pl', '${thiefPass}'),(default, 'Test', 'Test', 'test@codeberry.pl', '${testPass}')`
     );
   }
 };
 init();
-
 app.use((req, res, next) => {
   res.setHeader("X-TemplateEngine", "EJS 3.1.6");
   next();
@@ -83,14 +83,8 @@ app.use((req, res, next) => {
 });
 
 dotenv.config();
-app.use(routes);
 
-app.use(function (err, req, res, next) {
-  res.status(err.status || 500);
-  res.render("error.ejs", {
-    message: err.message,
-  });
-});
+app.use(routes);
 
 app.listen(process.env.PORT || 80, function () {
   console.log(

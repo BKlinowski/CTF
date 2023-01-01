@@ -5,16 +5,16 @@ import { v4 as uuidv4 } from "uuid";
 
 export const postLogin = async (req, res) => {
   const { email, password } = req.body;
-  const [userExists] = await db.queryRows(`select exists(
-        SELECT FROM users WHERE email = '${email}'
-        );`);
+  const [userExists] = await db.queryRows(
+    "select exists(SELECT FROM users WHERE email = $1);",
+    [email]
+  );
   if (userExists.exists) {
     const [user] = await db.queryRows(
-      `SELECT * FROM users WHERE email = '${email}' LIMIT 1`
+      "SELECT * FROM users WHERE email = $1);",
+      [email]
     );
-    console.log(user);
     const userPass = await bcrypt.compare(password, user.password);
-    // console.log(userPass)
     console.log(req.session.user);
     if (userPass && !req.session.user && !req.session.role) {
       req.session.user = user.email;
@@ -63,8 +63,10 @@ export const verifyActiveSession = async (req, res, next) => {
         role: req.session.role,
       },
       (err, html) => {
-        if (err) throw new Error("Something went wrong in render");
-        res.send(html);
+        console.error(err);
+        res.render("error.ejs", {
+          message: "Something went wrong in render",
+        });
       }
     );
   } else {
@@ -91,8 +93,10 @@ export const verifyActiveSession = async (req, res, next) => {
           role: req.session.role,
         },
         (err, html) => {
-          if (err) throw new Error("Something went wrong in render");
-          res.send(html);
+          console.error(err);
+          res.render("error.ejs", {
+            message: "Something went wrong in render",
+          });
         }
       );
     }
@@ -116,8 +120,10 @@ export const isAdmin = (req, res, next) => {
         role: req.session.role,
       },
       (err, html) => {
-        if (err) throw new Error("Something went wrong in render");
-        res.send(html);
+        console.error(err);
+        res.render("error.ejs", {
+          message: "Something went wrong in render",
+        });
       }
     );
   }
@@ -140,15 +146,27 @@ export const isAdmin = (req, res, next) => {
         }
       );
     } else {
-      return res.render(
-        "admin.ejs",
-        { isLoggedIn: req.session.user, role: "admin" },
-        (err, html) => {
-          if (err) throw new Error("Something went wrong in render");
-
-          res.send(html);
-        }
-      );
+      if (req.path === "admin") {
+        return res.render(
+          "admin.ejs",
+          { isLoggedIn: req.session.user, role: "admin" },
+          (err, html) => {
+            if (err) throw new Error("Something went wrong in render");
+            res.send(html);
+          }
+        );
+      } else if (req.path === "users") {
+        return res.render(
+          "users.ejs",
+          { isLoggedIn: req.session.user, role: "admin" },
+          (err, html) => {
+            console.error(err);
+            res.render("error.ejs", {
+              message: "Something went wrong in render",
+            });
+          }
+        );
+      }
     }
   } catch (err) {
     console.log(err);
@@ -160,8 +178,10 @@ export const isAdmin = (req, res, next) => {
         role: req.session.role,
       },
       (err, html) => {
-        if (err) throw new Error("Something went wrong in render");
-        res.send(html);
+        console.error(err);
+        res.render("error.ejs", {
+          message: "Something went wrong in render",
+        });
       }
     );
   }

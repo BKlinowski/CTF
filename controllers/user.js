@@ -50,9 +50,10 @@ export const postFeedback = async (req, res) => {
     }
     if (i == filter.length - 1) {
       try {
-        await db.query(
-          `INSERT INTO comments VALUES (default, '${name}', '${comment}')`
-        );
+        await db.query("INSERT INTO comments VALUES (default, $1, $2)", [
+          name,
+          comment,
+        ]);
       } catch (error) {
         console.error(error);
       }

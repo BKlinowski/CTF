@@ -23,7 +23,7 @@ services:
       - /app/node_modules
     depends_on:
       - backend
-    restart: always
+    restart: on-failure
     networks:
       - internal-network
   backend:
@@ -39,7 +39,7 @@ services:
       - ./.env
     depends_on:
       - pg
-    restart: always
+    restart: on-failure
     networks:
       - internal-network
   php:
@@ -51,6 +51,7 @@ services:
       - ./Dockerfiles/PHP/src:/var/www/html/
     networks:
       - internal-network
+    restart: on-failure
 
 networks:
   internal-network:
