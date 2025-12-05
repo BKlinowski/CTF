@@ -1,0 +1,28 @@
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mystatefulset
+spec:
+  selector:
+    matchLabels:
+      db: postgresql
+  serviceName: db
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        database: db
+    spec:
+      containers:
+        - name: database
+          image: postgres
+          ports:
+            - containerPort: 3306
+              name: database
+          volumeMounts:
+            - name: pg-volume
+              mountPath: /var/lib/postgresql/data
+    volumes:
+      - name: pg-volume
+        persistentVolumeClaim:
+          claimName: dbpvc

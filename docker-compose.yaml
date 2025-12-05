@@ -31,7 +31,7 @@ services:
       context: ./
       dockerfile: ./Dockerfiles/backend/Dockerfile
     ports:
-      - "192.168.0.4:3000:80"
+      - "192.168.0.224:3000:80"
     volumes:
       - ./:/app
       - /app/node_modules
@@ -46,7 +46,6 @@ services:
     build: ./Dockerfiles/PHP/
     depends_on:
       - backend
-    restart: always
     volumes:
       - ./Dockerfiles/PHP/src:/var/www/html/
     networks:
