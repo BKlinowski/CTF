@@ -71,7 +71,7 @@ typings/
 # dotenv environment variables file
 .env
 .env.test
-/private
+/backend/private
 
 
 # parcel-bundler cache (https://parceljs.org/)
@@ -104,3 +104,5 @@ dist
 
 # TernJS port file
 .tern-port
+
+/kubernetes/secrets

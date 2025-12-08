@@ -15,6 +15,9 @@ spec:
       containers:
         - name: backend
           image: bklinowski/ctf-backend
+          envFrom:
+            - secretRef:
+                name: backend-secrets
           resources:
             requests:
               memory: "250Mi"

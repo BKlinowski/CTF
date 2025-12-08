@@ -9,7 +9,7 @@ RUN apk update && apk add bash
 ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
     PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium-browser
 
-COPY Bot/package.json .
+COPY package.json .
 
 COPY waitforit.sh /waitforit.sh
 
@@ -17,6 +17,6 @@ RUN chmod +x /waitforit.sh
 
 RUN npm install
 
-COPY Bot .
+COPY . .
 
 CMD ["/waitforit.sh", "backend:80","-t", "5", "--", "npm", "start"]

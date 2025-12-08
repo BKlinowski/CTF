@@ -14,4 +14,4 @@ COPY . .
 
 EXPOSE 3000
 
-CMD ["/waitforit.sh", "pg:3306","-t", "5", "--", "npm", "start"]
+CMD ["/waitforit.sh", "db:5432","-t", "5", "--", "npm", "start"]

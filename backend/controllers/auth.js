@@ -5,13 +5,14 @@ import { v4 as uuidv4 } from "uuid";
 
 export const postLogin = async (req, res) => {
   const { email, password } = req.body;
+  console.log(email)
   const [userExists] = await db.queryRows(
     "select exists(SELECT FROM users WHERE email = $1);",
     [email]
   );
   if (userExists.exists) {
     const [user] = await db.queryRows(
-      "SELECT * FROM users WHERE email = $1);",
+      "SELECT * FROM users WHERE email = $1;",
       [email]
     );
     const userPass = await bcrypt.compare(password, user.password);

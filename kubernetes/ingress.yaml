@@ -5,14 +5,15 @@ metadata:
   labels:
     ingress: MainIngress
 spec:
+  ingressClassName: nginx
   rules:
-    - host: /
+    - host: ctf.local
       http:
         paths:
           - pathType: Prefix
             path: "/"
             backend:
               service:
-                name: backend-service
+                name: backend
                 port:
                   number: 80

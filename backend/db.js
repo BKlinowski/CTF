@@ -2,7 +2,7 @@ import pg from "pg"
 
 export const pool = new pg.Pool({
     user: process.env.POSTGRES_USER,
-    host: 'pg',
+    host: 'db',
     database: 'default',
     password: process.env.POSTGRES_PASSWORD,
 })
