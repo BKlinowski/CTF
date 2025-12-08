@@ -1,0 +1,43 @@
+jobs:
+  changes:
+    runs-on: ubuntu-latest
+    outputs:
+      backend: ${{ steps.filter.outputs.backend }}
+      bot: ${{ steps.filter.outputs.bot }}
+      php: ${{ steps.filter.outputs.php }}
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - uses: dorny/paths-filter@668c092af3649c4b664c54e4b704aa46782f6f7c # v3.0.2
+        id: filter
+        with:
+          filters: |
+            backend:
+              - 'backend/**'
+            bot:
+              - 'bot/**'
+            PHP:
+              - 'PHP/**'
+
+  backend:
+    needs: changes
+    if: ${{ needs.changes.outputs.backend == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - run: docker build -t backend ./Dockerfiles/backend
+
+  bot:
+    needs: changes
+    if: ${{ needs.changes.outputs.bot == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - run: docker build -t bot ./Dockerfiles/bot
+
+  PHP:
+    needs: changes
+    if: ${{ needs.changes.outputs.PHP == 'true' }}
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
+      - run: docker build -t php ./Dockerfiles/php
