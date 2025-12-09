@@ -1,3 +1,5 @@
+name: Build applications
+on: [push]
 jobs:
   changes:
     runs-on: ubuntu-latest
@@ -24,7 +26,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - run: docker build -t backend ./Dockerfiles/backend
+      - run: cd backend && docker build -t bklinowski/ctf-backend -f ../Dockerfiles/backend/Dockerfile && docker push bklinowski/ctf-backend
 
   bot:
     needs: changes
@@ -32,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - run: docker build -t bot ./Dockerfiles/bot
+      - run: cd bot && docker build -t bklinowski/ctf-bot -f ../Dockerfiles/bot/Dockerfile && docker push bklinowski/ctf-bot
 
   PHP:
     needs: changes
@@ -40,4 +42,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-      - run: docker build -t php ./Dockerfiles/php
+      - run: cd php && docker build -t bklinowski/ctf-php -f ../Dockerfiles/php/Dockerfile && docker push bklinowski/ctf-php
