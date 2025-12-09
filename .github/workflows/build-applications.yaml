@@ -19,54 +19,43 @@ jobs:
               - 'bot/**'
             PHP:
               - 'PHP/**'
-
-  backend:
+  build:
     needs: changes
-    if: ${{ needs.changes.outputs.backend == 'true' }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        include:
+          - name: backend
+            path: backend
+            image: bklinowski/ctf-backend
+            dockerfile: Dockerfiles/backend/Dockerfile
+            condition: ${{ needs.changes.outputs.backend == 'true' }}
+          - name: bot
+            path: bot
+            image: bklinowski/ctf-bot
+            dockerfile: Dockerfiles/bot/Dockerfile
+            condition: ${{ needs.changes.outputs.bot == 'true' }}
+          - name: php
+            path: php
+            image: bklinowski/ctf-php
+            dockerfile: Dockerfiles/php/Dockerfile
+            condition: ${{ needs.changes.outputs.PHP == 'true' }}
     steps:
       - name: Checkout repo
         uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
 
-      - name: Build php application
-        run: cd backend && docker build . -t bklinowski/ctf-backend -f ../Dockerfiles/backend/Dockerfile
+      - name: Login to Docker Hub
+        uses: docker/login-action@28fdb31ff34708d19615a74d67103ddc2ea9725c # v3.6.0
+        with:
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD}}
 
-      - name: Login to dockerhub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Push image
-        run: docker push bklinowski/ctf-backend
-
-  bot:
-    needs: changes
-    if: ${{ needs.changes.outputs.bot == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - name: Build php application
-        run: cd bot && docker build . -t bklinowski/ctf-bot -f ../Dockerfiles/bot/Dockerfile
-
-      - name: Login to dockerhub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Push image
-        run: docker push bklinowski/ctf-bot
-
-  PHP:
-    needs: changes
-    if: ${{ needs.changes.outputs.PHP == 'true' }}
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repo
-        uses: actions/checkout@8e8c483db84b4bee98b60c0593521ed34d9990e8 # v6.0.1
-
-      - name: Build php application
-        run: cd php && docker build . -t bklinowski/ctf-php -f ../Dockerfiles/php/Dockerfile
-
-      - name: Login to dockerhub
-        run: echo "${{ secrets.DOCKER_PASSWORD }}" | docker login -u "${{ secrets.DOCKER_USERNAME }}" --password-stdin
-
-      - name: Push image
-        run: docker push bklinowski/ctf-php
+      - name: Build and push
+        uses: docker/build-push-action@263435318d21b8e681c14492fe198d362a7d2c83 # v6.18.0
+        with:
+          context: ${{ matrix.path }}
+          file: ${{ matrix.dockerfile }}
+          push: true
+          tags: ${{ matrix.image }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
