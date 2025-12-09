@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 
 export const postLogin = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email)
+  console.log("email: ", email)
   const [userExists] = await db.queryRows(
     "select exists(SELECT FROM users WHERE email = $1);",
     [email]
